@@ -5,17 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="682d119a-eca2-4153-8720-21340695b931" name="Changes" comment="alot very. it works">
+      <change afterPath="$PROJECT_DIR$/src/com/inanyan/pi/Interpreter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/inanyan/pi/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inanyan/pi/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/GoalGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/GoalGenerator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/GoalPerformer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/GoalPerformer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/LogicBase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/LogicBase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/goals/BuiltinGoals.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/goals/BuiltinGoals.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/parsing/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/parsing/Parser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/repr/Clause.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/repr/Clause.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/repr/Term.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/repr/Term.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/util/LongASTStringify.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/util/ShortASTStringify.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/Environment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/Environment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/goals/FactFinderGoal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/goals/FactFinderGoal.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,8 +19,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>

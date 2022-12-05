@@ -16,10 +16,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 
 public class Main {
-    private final static LogicBase base = new LogicBase();
-    private static boolean hadError = false;
     private static String currentSource;
 
     private static InputStreamReader input = new InputStreamReader(System.in);
@@ -28,7 +27,6 @@ public class Main {
     private final static ErrorListener errorListener = new ErrorListener() {
         @Override
         public void reportParsingError(int line, String msg) {
-            hadError = true;
             report(line, "error", msg);
         }
 
@@ -39,7 +37,6 @@ public class Main {
 
         @Override
         public void reportRuntimeError(int line, String msg) {
-            hadError = true;
             report(line, "runtime error", msg);
         }
 
@@ -47,6 +44,8 @@ public class Main {
             System.out.println(currentSource + ":" + String.valueOf(pos) + ": " + type + ": " + msg + ".");
         }
     };
+
+    private final static Interpreter interpreter = new Interpreter(errorListener);
 
     public static void main(String[] args) {
         if (args.length != 1) {
@@ -72,9 +71,7 @@ public class Main {
         try {
             byte[] bytes = Files.readAllBytes(Paths.get(path));
             String source = new String(bytes, Charset.defaultCharset());
-            List<Clause> clauses = generate(source);
-            if (clauses == null) return false;
-            base.add(clauses);
+            interpreter.add(source);
             return true;
         } catch (IOException e) {
             // TODO: Print e?
@@ -91,7 +88,6 @@ public class Main {
 
     private static boolean startConsulting() {
         currentSource = "<consult>";
-        hadError = false;
 
         while (true) {
             System.out.print("> ");
@@ -110,65 +106,61 @@ public class Main {
                 } else {
                     consultStr(line);
                 }
-                hadError = false;
             } catch (IOException e) {
                 // TODO: Print e?
                 return false;
             }
         }
     }
-
-    private static List<Clause> generate(String src) {
-        Lexer lexer = new Lexer(errorListener, src);
-        List<Token> tokens = lexer.scanTokens();
-        if (hadError) return null;
-
-        Parser parser = new Parser(errorListener, tokens);
-        List<Clause> clauses = parser.parse();
-        if (hadError) return null;
-
-        return clauses;
-    }
-
     private static void consultStr(String line) {
-        List<Clause> clauses = generate(line);
-        if (clauses == null) return;
-
-        if (clauses.size() != 1) {
-            System.out.println("error: only one clause is allowed to consult");
-        } else {
-            GoalPerformer performer = new GoalPerformer(errorListener, base, clauses.get(0));
-            run(performer);
+        if (interpreter.startConsulting(line)) {
+            boolean result = run();
+            if (result) {
+                System.out.println("yes.");
+            } else {
+                System.out.println("no.");
+            }
         }
     }
 
     private static void addStr(String line) {
-        List<Clause> clauses = generate(line);
-        if (clauses == null) return;
-
-        base.add(clauses);
+        interpreter.add(line);
     }
 
-    private static void run(GoalPerformer performer) {
-        Environment env = new Environment();
-        boolean result = performer.call(env);
+    private static boolean run() {
+        boolean result = interpreter.call();
 
         if (result) {
-            for (Map.Entry<String, Term> entry : env) {
-                System.out.println(entry.getKey() + " = " + entry.getValue().toString());
-            }
-
-            if (env.isEmpty()) {
-                System.out.println("yes.");
-                return;
-            }
-
-            if (askUserToRedo()) {
-                run(performer);
+            if (interpreter.getCurrentEnvironment().isEmpty()) {
+                return true;
+            } else {
+                printEnvironment();
+                return runRedo();
             }
         } else {
-            System.out.println("no.");
+            return false;
         }
+    }
+
+    private static boolean runRedo() {
+        while (askUserToRedo()) {
+            boolean result = interpreter.redo();
+
+            printEnvironment();
+
+            if (!result) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static void printEnvironment() {
+        StringJoiner sj = new StringJoiner("\n");
+        for (Map.Entry<String, Term> entry : interpreter.getCurrentEnvironment()) {
+            sj.add(entry.getKey() + " = " + entry.getValue().toString());
+        }
+        System.out.println(sj);
     }
 
     public static boolean askUserToRedo() {

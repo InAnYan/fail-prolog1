@@ -10,7 +10,7 @@ import java.util.List;
 public class FactFinderGoal extends Goal {
     private final List<Term> terms;
     private final String name;
-    private int lastPos;
+    private int lastPos = -1;
 
     public FactFinderGoal(LogicBase base, String name, List<Term> terms) {
         super(base);

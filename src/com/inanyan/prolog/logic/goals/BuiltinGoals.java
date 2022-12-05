@@ -3,17 +3,17 @@ package com.inanyan.prolog.logic.goals;
 import com.inanyan.prolog.logic.Environment;
 import com.inanyan.prolog.logic.Goal;
 import com.inanyan.prolog.repr.Term;
-import com.inanyan.prolog.util.LongASTStringify;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class BuiltinGoals {
-    public static final Goal writer = new Goal(null) {
+    public static final Goal write = new Goal(null) {
         @Override
         public boolean call(Environment env) {
             // TODO: What should it do?
             for (Map.Entry<String, Term> entry : env) {
-                System.out.println(entry.getKey() + " = " + new LongASTStringify().convert(entry.getValue()));
+                System.out.println(entry.getKey() + " = " + entry.getValue().toString());
             }
             return true;
         }
@@ -50,4 +50,21 @@ public class BuiltinGoals {
             return false;
         }
     };
+
+    public static class FuncPair {
+        public final int arity;
+        public final Goal goal;
+
+        public FuncPair(int arity, Goal goal) {
+            this.arity = arity;
+            this.goal = goal;
+        }
+    }
+
+    public static final Map<String, FuncPair> funcs = new HashMap<>();
+    static {
+        funcs.put("write", new FuncPair(-1, write)); // TODO: Really -1?
+        funcs.put("nl", new FuncPair(0, nl));
+        funcs.put("fail", new FuncPair(0, fail));
+    }
 }

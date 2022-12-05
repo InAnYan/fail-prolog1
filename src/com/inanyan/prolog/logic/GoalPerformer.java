@@ -4,7 +4,6 @@ import com.inanyan.prolog.repr.Clause;
 import com.inanyan.prolog.repr.Term;
 import com.inanyan.prolog.util.ErrorListener;
 
-import javax.imageio.ImageTranscoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -105,7 +104,7 @@ public class GoalPerformer implements Clause.Visitor<Boolean> {
         for (int i = 0; i < fromBase.size(); i++) {
             if (fromFact.get(i) instanceof Term.Variable varFromFact) {
                 if (varsToMatch.containsKey(varFromFact.name.text)) {
-                    if (!fromBase.get(i).compareTo(varsToMatch.get(varFromFact.name.text))) {
+                    if (!fromBase.get(i).match(varsToMatch.get(varFromFact.name.text))) {
                         return false;
                     }
                 } else {
@@ -114,7 +113,7 @@ public class GoalPerformer implements Clause.Visitor<Boolean> {
                 continue;
             }
 
-            if (!fromBase.get(i).compareTo(fromFact.get(i))) {
+            if (!fromBase.get(i).match(fromFact.get(i))) {
                 return false;
             }
         }

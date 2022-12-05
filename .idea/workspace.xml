@@ -4,34 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="682d119a-eca2-4153-8720-21340695b931" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/prolog1.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sandbox.pl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/inanyan/pi/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/Environment.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/Goal.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/GoalGenerator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/GoalPerformer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/LogicBase.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/goals/BuiltinGoals.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/goals/CompoundGoal.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/goals/FactFinderGoal.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/parsing/Lexer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/parsing/Parser.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/parsing/Token.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/parsing/TokenType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/repr/Clause.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/repr/Term.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/util/ErrorListener.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/util/LongASTStringify.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/util/Rules.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/util/ShortASTStringify.java" afterDir="false" />
+    <list default="true" id="682d119a-eca2-4153-8720-21340695b931" name="Changes" comment="alot very. it works">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/inanyan/pi/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inanyan/pi/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/GoalGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/GoalGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/GoalPerformer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/GoalPerformer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/LogicBase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/LogicBase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/goals/BuiltinGoals.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/goals/BuiltinGoals.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/parsing/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/parsing/Parser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/repr/Clause.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/repr/Clause.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/repr/Term.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/repr/Term.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/util/LongASTStringify.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/util/ShortASTStringify.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,12 +25,17 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Interface" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MacroExpansionManager">
@@ -71,7 +60,7 @@
   }
 }</component>
   <component name="RunManager">
-    <configuration name="Unnamed" type="Application" factoryName="Application" nameIsGenerated="true">
+    <configuration name="PI-Sandbox" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="com.inanyan.pi.Main" />
       <module name="prolog1" />
       <option name="PROGRAM_PARAMETERS" value="sandbox.pl" />
@@ -89,6 +78,14 @@
       <option name="presentableId" value="Default" />
       <updated>1669196029218</updated>
     </task>
+    <task id="LOCAL-00001" summary="alot very. it works">
+      <created>1670223251104</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1670223251104</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -101,6 +98,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="alot very. it works" />
+    <option name="LAST_COMMIT_MESSAGE" value="alot very. it works" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>

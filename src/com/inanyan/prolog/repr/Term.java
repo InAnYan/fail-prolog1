@@ -1,10 +1,13 @@
 package com.inanyan.prolog.repr;
 
 import com.inanyan.prolog.parsing.Token;
+import com.inanyan.prolog.util.Rules;
 
 public abstract class Term {
     public abstract <R> R accept(Visitor<R> visitor);
-    public abstract boolean compareTo(Term term);
+
+    public abstract boolean match(Term term);
+    public abstract String toString();
 
     public static class Atom extends Term {
         public final Token name;
@@ -18,11 +21,19 @@ public abstract class Term {
         }
 
         @Override
-        public boolean compareTo(Term term) {
-            if (term instanceof Term.Atom) {
-                return this.name.equals(((Atom) term).name);
+        public boolean match(Term node) {
+            if (node instanceof Term.Atom) {
+                return this.name.text.equals(((Atom) node).name.text);
             }
             return false;
+        }
+        @Override
+        public String toString() {
+            if (Rules.isStringLooksLikeVariable(this.name.text)) {
+                return "'" + this.name + "'";
+            } else {
+                return this.name.text;
+            }
         }
     }
 
@@ -38,11 +49,16 @@ public abstract class Term {
         }
 
         @Override
-        public boolean compareTo(Term term) {
-            if (term instanceof Term.Variable) {
-                return this.name.equals(((Variable) term).name);
+        public boolean match(Term node) {
+            if (node instanceof Term.Variable) {
+                return this.name.equals(((Variable) node).name);
             }
             return false;
+        }
+
+        @Override
+        public String toString() {
+            return this.name.text;
         }
     }
 
@@ -61,11 +77,16 @@ public abstract class Term {
         }
 
         @Override
-        public boolean compareTo(Term term) {
-            if (term instanceof Term.Number) {
-                return this.num == ((Number) term).num;
+        public boolean match(Term node) {
+            if (node instanceof Term.Number) {
+                return this.num == ((Number) node).num;
             }
             return false;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(this.num);
         }
     }
 

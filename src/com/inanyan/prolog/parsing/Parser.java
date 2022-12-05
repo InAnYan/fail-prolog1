@@ -43,7 +43,7 @@ public class Parser {
             clauses.add(factWithoutDot());
         } while (match(TokenType.COMMA));
         require(TokenType.DOT, "expected '.' at the end of"
-                + (clauses.size() == 1 ? " fact clause" : " compound clause")); // TODO: At the end or in the end?
+                + (clauses.size() == 1 ? " fact clause" : " compound clause"));
 
         if (clauses.size() == 1) {
             return clauses.get(0);
@@ -54,10 +54,13 @@ public class Parser {
 
     private Clause.Fact factWithoutDot() {
         Token name = require(TokenType.ATOM, "expected fact name");
-        require(TokenType.OPEN_PAREN, "expected '(' after fact clause");
-        List<Term> terms = termsCommaList();
-        require(TokenType.CLOSE_PAREN, "expected ')' at the end of fact clause");
-        return new Clause.Fact(name, terms);
+        if (match(TokenType.OPEN_PAREN)) {
+            List<Term> terms = termsCommaList();
+            require(TokenType.CLOSE_PAREN, "expected ')' at the end of fact clause");
+            return new Clause.Fact(name, terms);
+        } else {
+            return new Clause.Fact(name, new ArrayList<>());
+        }
     }
 
     private Clause.Fact fact() {

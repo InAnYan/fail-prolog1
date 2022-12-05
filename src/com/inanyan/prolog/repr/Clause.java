@@ -20,7 +20,7 @@ public abstract class Clause {
             return visitor.visitFact(this);
         }
 
-        public String toString() {
+        public String toInfoString() {
             return this.name + "/" + this.args.size();
         }
     }
@@ -39,6 +39,6 @@ public abstract class Clause {
 
     public interface Visitor<R> {
         R visitFact(Fact fact);
-        R visitCompoundClauses(CompoundClauses fact);
+        R visitCompoundClauses(CompoundClauses compound);
     }
 }

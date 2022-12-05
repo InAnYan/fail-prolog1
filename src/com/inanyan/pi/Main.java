@@ -7,7 +7,6 @@ import com.inanyan.prolog.parsing.Token;
 import com.inanyan.prolog.repr.Clause;
 import com.inanyan.prolog.repr.Term;
 import com.inanyan.prolog.util.ErrorListener;
-import com.inanyan.prolog.util.LongASTStringify;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,27 +21,26 @@ public class Main {
     private final static LogicBase base = new LogicBase();
     private static boolean hadError = false;
     private static String currentSource;
-    private static final LongASTStringify stringifier = new LongASTStringify();
 
     private static InputStreamReader input = new InputStreamReader(System.in);
     private static BufferedReader reader = new BufferedReader(input);
 
     private final static ErrorListener errorListener = new ErrorListener() {
         @Override
-        public void reportParsingError(SourcePos pos, String msg) {
+        public void reportParsingError(int line, String msg) {
             hadError = true;
-            report(pos.fileIndexPos, "error", msg);
+            report(line, "error", msg);
         }
 
         @Override
-        public void reportParsingWarning(SourcePos pos, String msg) {
-            report(pos.fileIndexPos, "warning", msg);
+        public void reportParsingWarning(int line, String msg) {
+            report(line, "warning", msg);
         }
 
         @Override
-        public void reportRuntimeError(SourcePos pos, String msg) {
+        public void reportRuntimeError(int line, String msg) {
             hadError = true;
-            report(pos.fileIndexPos, "runtime error", msg);
+            report(line, "runtime error", msg);
         }
 
         private void report(int pos, String type, String msg) {
@@ -157,7 +155,7 @@ public class Main {
 
         if (result) {
             for (Map.Entry<String, Term> entry : env) {
-                System.out.println(entry.getKey() + " = " + stringifier.convert(entry.getValue()));
+                System.out.println(entry.getKey() + " = " + entry.getValue().toString());
             }
 
             if (env.isEmpty()) {

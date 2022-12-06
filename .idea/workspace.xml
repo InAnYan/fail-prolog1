@@ -4,11 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="682d119a-eca2-4153-8720-21340695b931" name="Changes" comment="alot very. it works">
-      <change afterPath="$PROJECT_DIR$/src/com/inanyan/pi/Interpreter.java" afterDir="false" />
+    <list default="true" id="682d119a-eca2-4153-8720-21340695b931" name="Changes" comment="the last - goals">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/inanyan/pi/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inanyan/pi/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/Environment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/Environment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/Goal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/Goal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/GoalGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/GoalGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/goals/BuiltinGoals.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/goals/BuiltinGoals.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/goals/FactFinderGoal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/goals/FactFinderGoal.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -79,7 +80,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670223251104</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="the last - goals">
+      <created>1670229274380</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1670229274380</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -95,7 +103,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="alot very. it works" />
-    <option name="LAST_COMMIT_MESSAGE" value="alot very. it works" />
+    <MESSAGE value="the last - goals" />
+    <option name="LAST_COMMIT_MESSAGE" value="the last - goals" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>

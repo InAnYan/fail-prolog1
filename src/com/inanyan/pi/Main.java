@@ -1,10 +1,5 @@
 package com.inanyan.pi;
 
-import com.inanyan.prolog.logic.*;
-import com.inanyan.prolog.parsing.Lexer;
-import com.inanyan.prolog.parsing.Parser;
-import com.inanyan.prolog.parsing.Token;
-import com.inanyan.prolog.repr.Clause;
 import com.inanyan.prolog.repr.Term;
 import com.inanyan.prolog.util.ErrorListener;
 
@@ -14,15 +9,14 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
 
 public class Main {
     private static String currentSource;
 
-    private static InputStreamReader input = new InputStreamReader(System.in);
-    private static BufferedReader reader = new BufferedReader(input);
+    private static final InputStreamReader input = new InputStreamReader(System.in);
+    private static final BufferedReader reader = new BufferedReader(input);
 
     private final static ErrorListener errorListener = new ErrorListener() {
         @Override
@@ -146,10 +140,10 @@ public class Main {
         while (askUserToRedo()) {
             boolean result = interpreter.redo();
 
-            printEnvironment();
-
             if (!result) {
                 return false;
+            } else {
+                printEnvironment();
             }
         }
         return true;

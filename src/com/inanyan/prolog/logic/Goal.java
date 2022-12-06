@@ -1,7 +1,7 @@
 package com.inanyan.prolog.logic;
 
 public abstract class Goal {
-    private LogicBase base;
+    protected LogicBase base;
 
     public Goal(LogicBase base) {
         this.base = base;

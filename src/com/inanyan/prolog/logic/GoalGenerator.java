@@ -27,14 +27,12 @@ public class GoalGenerator implements Clause.Visitor<Goal> {
 
     @Override
     public Goal visitFact(Clause.Fact fact) {
-        if (BuiltinGoals.funcs.containsKey(fact.name.text)) {
-            // TODO: Is that different predicate or semantic error?
-            BuiltinGoals.FuncPair pair = BuiltinGoals.funcs.get(fact.name.text);
-            if (fact.args.size() == pair.arity) {
-                return pair.goal;
-            }
+        Goal builtin = BuiltinGoals.builtinCheck(fact);
+        if (builtin != null) {
+            return builtin;
+        } else {
+            return new FactFinderGoal(base, fact.name.text, fact.args);
         }
-        return new FactFinderGoal(base, fact.name.text, fact.args);
     }
 
     @Override

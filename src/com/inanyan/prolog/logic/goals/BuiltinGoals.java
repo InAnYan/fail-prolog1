@@ -2,6 +2,7 @@ package com.inanyan.prolog.logic.goals;
 
 import com.inanyan.prolog.logic.Environment;
 import com.inanyan.prolog.logic.Goal;
+import com.inanyan.prolog.repr.Clause;
 import com.inanyan.prolog.repr.Term;
 
 import java.util.HashMap;
@@ -66,5 +67,22 @@ public class BuiltinGoals {
         funcs.put("write", new FuncPair(-1, write)); // TODO: Really -1?
         funcs.put("nl", new FuncPair(0, nl));
         funcs.put("fail", new FuncPair(0, fail));
+    }
+
+    public static Goal builtinCheck(Clause.Fact fact) {
+        FuncPair pair = funcs.get(fact.name.text);
+        if (pair == null) {
+            return null;
+        }
+
+        int providedArity = fact.args.size();
+        // TODO: If the arity is incorrect is that a semantic error or other predicate?
+        if (providedArity == pair.arity) {
+            return pair.goal;
+        } else if (providedArity >= Math.abs(pair.arity)) {
+            return pair.goal;
+        }
+
+        return null;
     }
 }

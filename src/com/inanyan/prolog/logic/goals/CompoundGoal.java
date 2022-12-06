@@ -3,6 +3,7 @@ package com.inanyan.prolog.logic.goals;
 import com.inanyan.prolog.logic.Environment;
 import com.inanyan.prolog.logic.Goal;
 import com.inanyan.prolog.logic.LogicBase;
+import com.inanyan.prolog.repr.Term;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class CompoundGoal extends Goal {
     }
 
     @Override
-    public boolean call(Environment env) {
+    public boolean call(Configuration conf, List<Term> args, Environment env) {
         return mainJob(env, true);
     }
 
@@ -44,7 +45,9 @@ public class CompoundGoal extends Goal {
             }
 
             Goal currentGoal = goalList.get(currentGoalIndex);
-            boolean result = mode ? currentGoal.call(env) : currentGoal.redo(env);
+            //boolean result = mode ? currentGoal.call(env) : currentGoal.redo(env);
+
+            boolean result = false;
 
             if (result) {
                 currentGoalIndex++;

@@ -29,6 +29,7 @@ public class GoalGenerator implements Clause.Visitor<Goal> {
     public Goal visitFact(Clause.Fact fact) {
         Goal builtin = BuiltinGoals.builtinCheck(fact);
         if (builtin != null) {
+            builtin.changeBase(this.base);
             return builtin;
         } else {
             return new FactFinderGoal(base, fact.name.text, fact.args);

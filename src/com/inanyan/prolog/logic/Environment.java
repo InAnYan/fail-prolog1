@@ -21,6 +21,10 @@ public class Environment implements Iterable<Map.Entry<String, Term>> {
         map.clear();
     }
 
+    public void delete(String name) {
+        map.remove(name);
+    }
+
     @Override
     public Iterator<Map.Entry<String, Term>> iterator() {
         return map.entrySet().iterator();

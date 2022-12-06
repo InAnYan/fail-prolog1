@@ -6,15 +6,28 @@ import com.inanyan.prolog.repr.Clause;
 import com.inanyan.prolog.repr.Term;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 
 public class BuiltinGoals {
     public static final Goal write = new Goal(null) {
         @Override
-        public boolean call(Environment env) {
-            // TODO: What should it do?
-            for (Map.Entry<String, Term> entry : env) {
-                System.out.println(entry.getKey() + " = " + entry.getValue().toString());
+        public boolean call(Configuration conf, List<Term> args, Environment env) {
+            StringJoiner sj = new StringJoiner(" ");
+            for (Term term : args) {
+                if (term instanceof Term.Variable termVar) {
+                    Term value = env.lookup(termVar.name.text);
+                    if (value == null) {
+                        conf.errorListener.reportRuntimeError(termVar.name.line,
+                                "unassigned logical variable '" + termVar.name.text + "'");
+                        return false; // TODO: Really? Maybe it should throw error?
+                    } else {
+                        sj.add(value.toString());
+                    }
+                } else {
+                    sj.add(term.toString());
+                }
             }
             return true;
         }
@@ -27,7 +40,7 @@ public class BuiltinGoals {
 
     public static final Goal fail = new Goal(null) {
         @Override
-        public boolean call(Environment env) {
+        public boolean call(Configuration conf, List<Term> args, Environment env) {
             return false;
         }
 
@@ -41,8 +54,8 @@ public class BuiltinGoals {
 
     public static final Goal nl = new Goal(null) {
         @Override
-        public boolean call(Environment env) {
-            System.out.print("\n");
+        public boolean call(Configuration conf, List<Term> args, Environment env) {
+            conf.out.print("\n");
             return true;
         }
 

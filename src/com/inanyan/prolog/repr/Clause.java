@@ -3,6 +3,7 @@ package com.inanyan.prolog.repr;
 import com.inanyan.prolog.parsing.Token;
 
 import java.util.List;
+import java.util.Set;
 
 public abstract class Clause {
     public abstract <R> R accept(Visitor<R> visitor);
@@ -10,10 +11,12 @@ public abstract class Clause {
     public static class Fact extends Clause {
         public final Token name;
         public final List<Term> args;
+        public final Set<Term> ownVariables;
 
-        public Fact(Token name, List<Term> args) {
+        public Fact(Token name, List<Term> args, Set<Term> ownVariables) {
             this.name = name;
             this.args = args;
+            this.ownVariables = ownVariables;
         }
 
         public <R> R accept(Visitor<R> visitor) {

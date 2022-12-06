@@ -5,12 +5,16 @@ import com.inanyan.prolog.repr.Term;
 import com.inanyan.prolog.util.ErrorListener;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Parser {
     private final List<Token> tokens;
     private final ErrorListener errorListener;
     private int pos = 0;
+
+    private final Set<Term> boundVariables = new HashSet<>();
 
     public Parser(ErrorListener errorListener, List<Token> tokens) {
         this.tokens = tokens;
@@ -24,6 +28,7 @@ public class Parser {
 
         while (!isAtEnd()) {
             try {
+                boundVariables.clear();
                 clauses.add(clause());
             } catch (ParserError e) {
                 synchronize();
@@ -57,9 +62,15 @@ public class Parser {
         if (match(TokenType.OPEN_PAREN)) {
             List<Term> terms = termsCommaList();
             require(TokenType.CLOSE_PAREN, "expected ')' at the end of fact clause");
-            return new Clause.Fact(name, terms);
+
+            Set<Term> ownSet = new HashSet<>(terms);
+            ownSet.removeAll(boundVariables);
+
+            boundVariables.addAll(terms);
+
+            return new Clause.Fact(name, terms, ownSet);
         } else {
-            return new Clause.Fact(name, new ArrayList<>());
+            return new Clause.Fact(name, new ArrayList<>(), new HashSet<>());
         }
     }
 
@@ -97,6 +108,7 @@ public class Parser {
     }
 
     private void synchronize() {
+        boundVariables.clear();
         if (!isAtEnd()) pos++;
         if (previous().type == TokenType.DOT) return;
         while (!isAtEnd() && !match(TokenType.DOT)) {

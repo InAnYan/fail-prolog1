@@ -1,6 +1,7 @@
 package com.inanyan.prolog.parsing;
 
-import com.inanyan.prolog.repr.Clause;
+import com.inanyan.prolog.repr.Logic;
+import com.inanyan.prolog.repr.Rule;
 import com.inanyan.prolog.repr.Term;
 import com.inanyan.prolog.util.ErrorListener;
 
@@ -14,7 +15,7 @@ public class Parser {
     private final ErrorListener errorListener;
     private int pos = 0;
 
-    private final Set<String> boundVariables = new HashSet<>();
+    private final Set<Term.Var> boundVariables = new HashSet<>();
 
     public Parser(ErrorListener errorListener, List<Token> tokens) {
         this.tokens = tokens;
@@ -23,13 +24,13 @@ public class Parser {
 
     private static class ParserError extends RuntimeException {}
 
-    public List<Clause> parse() {
-        List<Clause> clauses = new ArrayList<>();
+    public List<Rule> parseProgram() {
+        List<Rule> clauses = new ArrayList<>();
 
         while (!isAtEnd()) {
             try {
                 boundVariables.clear();
-                clauses.add(clause());
+                clauses.add(rule());
             } catch (ParserError e) {
                 synchronize();
             }
@@ -38,12 +39,24 @@ public class Parser {
         return clauses;
     }
 
-    private Clause clause() {
-        return compound();
+    public Logic parseREPL() {
+        return conjunction();
     }
 
-    private Clause compound() {
-        List<Clause> clauses = new ArrayList<>();
+    private Rule rule() {
+        Logic.Fact head = factWithoutDot();
+
+        if (match(TokenType.NECK)) {
+            Logic body = conjunction();
+            return new Rule(head, body);
+        } else {
+            int line = previous().line;
+            return new Rule(head, new Logic.Fact("true", line, new ArrayList<>(), new HashSet<>()));
+        }
+    }
+
+    private Logic conjunction() {
+        List<Logic> clauses = new ArrayList<>();
         do {
             clauses.add(factWithoutDot());
         } while (match(TokenType.COMMA));
@@ -53,43 +66,37 @@ public class Parser {
         if (clauses.size() == 1) {
             return clauses.get(0);
         } else {
-            return new Clause.Compound(clauses);
+            return new Logic.Conjunction(clauses);
         }
     }
 
-    private Clause.Fact factWithoutDot() {
+    private Logic.Fact factWithoutDot() {
         Token name = require(TokenType.ATOM, "expected fact name");
         if (match(TokenType.OPEN_PAREN)) {
             List<Term> terms = termsCommaList();
             require(TokenType.CLOSE_PAREN, "expected ')' at the end of fact clause");
 
-            Set<String> ownSet = getFactsOwnSet(terms);
+            Set<Term.Var> ownSet = getFactsOwnSet(terms);
             boundVariables.addAll(ownSet);
 
-            return new Clause.Fact(name, terms, ownSet);
+            return new Logic.Fact(name, terms, ownSet);
         } else {
-            return new Clause.Fact(name, new ArrayList<>(), new HashSet<>());
+            return new Logic.Fact(name, new ArrayList<>(), new HashSet<>());
         }
     }
 
-    private Set<String> getFactsOwnSet(List<Term> terms) {
-        Set<String> ownSet = new HashSet<>();
+    private Set<Term.Var> getFactsOwnSet(List<Term> terms) {
+        Set<Term.Var> ownSet = new HashSet<>();
 
         for (Term term : terms) {
-            if (term instanceof Term.Variable varTerm) {
-                ownSet.add(varTerm.name.text);
+            if (term instanceof Term.Var varTerm) {
+                ownSet.add(varTerm);
             }
         }
 
         ownSet.removeAll(boundVariables);
 
         return ownSet;
-    }
-
-    private Clause.Fact fact() {
-        Clause.Fact res = factWithoutDot();
-        require(TokenType.DOT, "expected '.' at the end of fact clause");
-        return res;
     }
 
     private List<Term> termsCommaList() {
@@ -104,15 +111,15 @@ public class Parser {
 
     private Term term() {
         if (match(TokenType.ATOM)) {
-            return new Term.Atom(previous());
+            return new Term.Atom(previous().text);
         } else if (match(TokenType.NUMBER)) {
             try {
-                return new Term.Number(previous().line, Integer.parseInt(previous().text));
+                return new Term.Number(Integer.parseInt(previous().text));
             } catch (NumberFormatException e) {
                 errorAtPrevious("can not parse number");
             }
         } else if (match(TokenType.VARIABLE)) {
-            return new Term.Variable(previous());
+            return new Term.Var(previous().text);
         }
 
         errorAtPrevious("expected term");
@@ -133,7 +140,7 @@ public class Parser {
             return previous();
         } else {
             errorAtCurrent(errorMsg);
-            return null;
+            return new Token(-1, TokenType.NECK, "Unreachable code, beacuse of error");
         }
     }
 

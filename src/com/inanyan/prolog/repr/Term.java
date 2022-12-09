@@ -1,46 +1,36 @@
 package com.inanyan.prolog.repr;
 
-import com.inanyan.prolog.parsing.Token;
-import com.inanyan.prolog.util.Rules;
+import com.inanyan.prolog.util.ParsingRules;
 
 public abstract class Term {
     public abstract <R> R accept(Visitor<R> visitor);
 
-    public abstract boolean match(Term term);
     public abstract String toString();
 
     public static class Atom extends Term {
-        public final Token name;
+        public final String name;
 
-        public Atom(Token name) {
+        public Atom(String name) {
             this.name = name;
         }
 
         public <R> R accept(Visitor<R> visitor) {
             return visitor.visitAtom(this);
         }
-
-        @Override
-        public boolean match(Term node) {
-            if (node instanceof Term.Atom) {
-                return this.name.text.equals(((Atom) node).name.text);
-            }
-            return false;
-        }
         @Override
         public String toString() {
-            if (Rules.isStringLooksLikeVariable(this.name.text)) {
+            if (ParsingRules.isStringLooksLikeVariable(this.name)) {
                 return "'" + this.name + "'";
             } else {
-                return this.name.text;
+                return this.name;
             }
         }
     }
 
-    public static class Variable extends Term {
-        public final Token name;
+    public static class Var extends Term {
+        public final String name;
 
-        public Variable(Token name) {
+        public Var(String name) {
             this.name = name;
         }
 
@@ -49,39 +39,20 @@ public abstract class Term {
         }
 
         @Override
-        public boolean match(Term node) {
-            if (node instanceof Term.Variable) {
-                return this.name.equals(((Variable) node).name);
-            }
-            return false;
-        }
-
-        @Override
         public String toString() {
-            return this.name.text;
+            return this.name;
         }
     }
 
     public static class Number extends Term {
-        // TODO: What is a Prolog Number Term?
-        public final int line;
         public final int num;
 
-        public Number(int line, int num) {
-            this.line = line;
+        public Number(int num) {
             this.num = num;
         }
 
         public <R> R accept(Visitor<R> visitor) {
             return visitor.visitNumber(this);
-        }
-
-        @Override
-        public boolean match(Term node) {
-            if (node instanceof Term.Number) {
-                return this.num == ((Number) node).num;
-            }
-            return false;
         }
 
         @Override
@@ -92,7 +63,7 @@ public abstract class Term {
 
     public interface Visitor <R> {
         R visitAtom(Atom term);
-        R visitVariable(Variable term);
+        R visitVariable(Var term);
         R visitNumber(Number term);
     }
 }

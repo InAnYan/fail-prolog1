@@ -1,7 +1,7 @@
 package com.inanyan.prolog.parsing;
 
 import com.inanyan.prolog.util.ErrorListener;
-import com.inanyan.prolog.util.Rules;
+import com.inanyan.prolog.util.ParsingRules;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,17 +49,28 @@ public class Lexer {
             case ')':  addToken(TokenType.CLOSE_PAREN); break;
             case '(':  addToken(TokenType.OPEN_PAREN); break;
 
+            case ':': {
+                advance();
+                if (peek() == '-') {
+                    addToken(TokenType.NECK);
+                } else {
+                    errorListener.reportParsingError(line, "unknown character");
+                }
+                break;
+            }
+
             case '\'': atomInQuotes(); break;
 
-            default:
-                if (Rules.isDigit(cur)) {
+            default: {
+                if (ParsingRules.isDigit(cur)) {
                     number();
-                } else if (Rules.isAlpha(cur) || cur == '_') {
+                } else if (ParsingRules.isAlpha(cur) || cur == '_') {
                     identifier();
                 } else {
                     errorListener.reportParsingError(line, "unknown character");
                 }
                 break;
+            }
         }
     }
 
@@ -78,17 +89,17 @@ public class Lexer {
     }
 
     private void number() {
-        while (!isAtEnd() && Rules.isDigit(peek())) {
+        while (!isAtEnd() && ParsingRules.isDigit(peek())) {
             advance();
         }
         addToken(TokenType.NUMBER);
     }
 
     private void identifier() {
-        while (!isAtEnd() && (Rules.isAlphanum(peek()) || peek() == '_')) {
+        while (!isAtEnd() && (ParsingRules.isAlphanum(peek()) || peek() == '_')) {
             advance();
         }
-        addToken(Rules.isShowsVariable(source.charAt(start)) ? TokenType.VARIABLE : TokenType.ATOM);
+        addToken(ParsingRules.isShowsVariable(source.charAt(start)) ? TokenType.VARIABLE : TokenType.ATOM);
     }
 
     private void addToken(TokenType type) {

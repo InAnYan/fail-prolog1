@@ -1,13 +1,13 @@
 package com.inanyan.prolog.logic;
 
-import com.inanyan.prolog.repr.Clause;
+import com.inanyan.prolog.repr.Logic;
 import com.inanyan.prolog.repr.Term;
 
 import java.io.PrintStream;
 import java.util.List;
 import java.util.Stack;
 
-public class Performer implements Clause.Visitor<Boolean> {
+public class Performer implements Logic.Visitor<Boolean> {
     public static class Configuration {
         public final LogicBase base;
         public final PrintStream out;
@@ -19,13 +19,13 @@ public class Performer implements Clause.Visitor<Boolean> {
     }
 
     private final Configuration conf;
-    private final Clause clause;
+    private final Logic clause;
 
     private final Stack<Integer> backtracking = new Stack<>();
 
     private final Environment env = new Environment();
 
-    public Performer(Configuration conf, Clause clause) {
+    public Performer(Configuration conf, Logic clause) {
         this.conf = conf;
         this.clause = clause;
     }
@@ -58,12 +58,12 @@ public class Performer implements Clause.Visitor<Boolean> {
         return visit(clause);
     }
 
-    private boolean visit(Clause clause) {
+    private boolean visit(Logic clause) {
         return clause.accept(this);
     }
 
     @Override
-    public Boolean visitFact(Clause.Fact fact) {
+    public Boolean visitFact(Logic.Fact fact) {
         if (mode) {
             return callFact(fact);
         } else {
@@ -71,18 +71,18 @@ public class Performer implements Clause.Visitor<Boolean> {
         }
     }
 
-    private boolean callFact(Clause.Fact fact) {
+    private boolean callFact(Logic.Fact fact) {
         List<List<Term>> terms = findPredicate(fact);
         return findMatching(0, fact, terms);
     }
 
-    private boolean redoFact(Clause.Fact fact) {
+    private boolean redoFact(Logic.Fact fact) {
         List<List<Term>> terms = findPredicate(fact);
         int lastPos = backtracking.pop();
         return findMatching(lastPos + 1, fact, terms);
     }
 
-    private boolean findMatching(int start, Clause.Fact fact, List<List<Term>> terms) {
+    private boolean findMatching(int start, Logic.Fact fact, List<List<Term>> terms) {
         for (int i = start; i < terms.size(); i++) {
             if (match(terms.get(i), fact)) {
                 backtracking.push(i);
@@ -94,16 +94,16 @@ public class Performer implements Clause.Visitor<Boolean> {
         return false;
     }
 
-    private void clearSetVariables(Clause.Fact fact) {
-        for (String term : fact.ownVariables) {
+    private void clearSetVariables(Logic.Fact fact) {
+        for (String term : fact.ownVars) {
             env.delete(term);
         }
     }
 
-    private boolean match(List<Term> fromBase, Clause.Fact fact) {
+    private boolean match(List<Term> fromBase, Logic.Fact fact) {
         for (int i = 0; i < fromBase.size(); i++) {
-            if (fact.args.get(i) instanceof Term.Variable varTerm) {
-                if (fact.ownVariables.contains(varTerm.name.text)) {
+            if (fact.args.get(i) instanceof Term.Var varTerm) {
+                if (fact.ownVars.contains(varTerm.name.text)) {
                     env.define(varTerm.name.text, fromBase.get(i));
                 } else {
                     if (!fromBase.get(i).match(env.lookup(varTerm.name.text))) {
@@ -117,7 +117,7 @@ public class Performer implements Clause.Visitor<Boolean> {
         return true;
     }
 
-    private List<List<Term>> findPredicate(Clause.Fact fact) {
+    private List<List<Term>> findPredicate(Logic.Fact fact) {
         String name = fact.name.text;
         int arity = fact.args.size();
 
@@ -128,32 +128,32 @@ public class Performer implements Clause.Visitor<Boolean> {
     }
 
     @Override
-    public Boolean visitCompoundClauses(Clause.Compound compound) {
+    public Boolean visitConjunction(Logic.Conjunction conjunction) {
         if (mode) {
-            return callCompound(compound);
+            return callCompound(conjunction);
         } else {
-            return redoCompound(compound);
+            return redoCompound(conjunction);
         }
     }
 
-    private boolean callCompound(Clause.Compound compound) {
-        return executeCompound(0, compound);
+    private boolean callCompound(Logic.Conjunction conjunction) {
+        return executeCompound(0, conjunction);
     }
 
-    private boolean redoCompound(Clause.Compound compound) {
-        return executeCompound(compound.clauses.size() - 1, compound);
+    private boolean redoCompound(Logic.Conjunction conjunction) {
+        return executeCompound(conjunction.facts.size() - 1, conjunction);
     }
 
-    private boolean executeCompound(int start, Clause.Compound compound) {
+    private boolean executeCompound(int start, Logic.Conjunction conjunction) {
         int index = start;
         while (true) {
             if (index < 0) {
                 return false;
-            } else if (index == compound.clauses.size()){
+            } else if (index == conjunction.facts.size()){
                 return true;
             }
 
-            Clause currentClause = compound.clauses.get(index);
+            Logic currentClause = conjunction.facts.get(index);
             boolean result = visit(currentClause);
 
             if (result) {

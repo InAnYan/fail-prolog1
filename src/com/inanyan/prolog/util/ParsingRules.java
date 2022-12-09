@@ -1,6 +1,6 @@
 package com.inanyan.prolog.util;
 
-public class Rules {
+public class ParsingRules {
     public static boolean isStringLooksLikeAtom(String str) {
         return !isStringLooksLikeVariable(str);
     }

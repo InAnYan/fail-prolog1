@@ -10,6 +10,7 @@ public enum TokenType {
 
     DOT,
     COMMA,
+    NECK,
 
     EOF
 }

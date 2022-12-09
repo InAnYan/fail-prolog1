@@ -5,7 +5,7 @@ import com.inanyan.prolog.logic.Performer;
 import com.inanyan.prolog.parsing.Lexer;
 import com.inanyan.prolog.parsing.Parser;
 import com.inanyan.prolog.parsing.Token;
-import com.inanyan.prolog.repr.Clause;
+import com.inanyan.prolog.repr.Logic;
 import com.inanyan.prolog.repr.Term;
 import com.inanyan.prolog.util.ErrorListener;
 
@@ -84,20 +84,20 @@ public class Main {
     }
 
     private static boolean add(String source) {
-        List<Clause> clauses = generate(source);
+        List<Logic> clauses = generate(source);
         if (clauses == null) return false;
 
         base.add(clauses);
         return true;
     }
 
-    private static List<Clause> generate(String source) {
+    private static List<Logic> generate(String source) {
         Lexer lexer = new Lexer(errorListener, source);
         List<Token> tokens = lexer.scanTokens();
         if (hadError) return null;
 
         Parser parser = new Parser(errorListener, tokens);
-        List<Clause> clauses = parser.parse();
+        List<Logic> clauses = parser.parse();
         if (hadError) return null;
 
         return clauses;
@@ -153,16 +153,16 @@ public class Main {
     }
 
     private static boolean prepareToConsultStr(String line) {
-        Clause clause = generateConsultStr(line);
+        Logic clause = generateConsultStr(line);
         if (clause == null) return false;
 
         createPerformer(clause);
         return true;
     }
 
-    private static Clause generateConsultStr(String line) {
+    private static Logic generateConsultStr(String line) {
         hadError = false;
-        List<Clause> clauses = generate(line);
+        List<Logic> clauses = generate(line);
         if (hadError || clauses == null) return null;
 
         if (clauses.size() != 1) {
@@ -174,7 +174,7 @@ public class Main {
         return clauses.get(0);
     }
 
-    private static void createPerformer(Clause clause) {
+    private static void createPerformer(Logic clause) {
         Performer.Configuration conf = new Performer.Configuration(base, System.out);
         performer = new Performer(conf, clause);
     }

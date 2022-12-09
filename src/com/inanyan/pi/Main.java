@@ -1,5 +1,11 @@
 package com.inanyan.pi;
 
+import com.inanyan.prolog.logic.LogicBase;
+import com.inanyan.prolog.logic.Performer;
+import com.inanyan.prolog.parsing.Lexer;
+import com.inanyan.prolog.parsing.Parser;
+import com.inanyan.prolog.parsing.Token;
+import com.inanyan.prolog.repr.Clause;
 import com.inanyan.prolog.repr.Term;
 import com.inanyan.prolog.util.ErrorListener;
 
@@ -9,6 +15,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
 
@@ -18,9 +25,11 @@ public class Main {
     private static final InputStreamReader input = new InputStreamReader(System.in);
     private static final BufferedReader reader = new BufferedReader(input);
 
+    private static boolean hadError = false;
     private final static ErrorListener errorListener = new ErrorListener() {
         @Override
         public void reportParsingError(int line, String msg) {
+            hadError = true;
             report(line, "error", msg);
         }
 
@@ -31,6 +40,7 @@ public class Main {
 
         @Override
         public void reportRuntimeError(int line, String msg) {
+            hadError = true;
             report(line, "runtime error", msg);
         }
 
@@ -39,7 +49,8 @@ public class Main {
         }
     };
 
-    private final static Interpreter interpreter = new Interpreter(errorListener);
+    private static Performer performer = null;
+    private final static LogicBase base = new LogicBase();
 
     public static void main(String[] args) {
         if (args.length != 1) {
@@ -65,12 +76,31 @@ public class Main {
         try {
             byte[] bytes = Files.readAllBytes(Paths.get(path));
             String source = new String(bytes, Charset.defaultCharset());
-            interpreter.add(source);
-            return true;
+            return add(source);
         } catch (IOException e) {
             // TODO: Print e?
             return false;
         }
+    }
+
+    private static boolean add(String source) {
+        List<Clause> clauses = generate(source);
+        if (clauses == null) return false;
+
+        base.add(clauses);
+        return true;
+    }
+
+    private static List<Clause> generate(String source) {
+        Lexer lexer = new Lexer(errorListener, source);
+        List<Token> tokens = lexer.scanTokens();
+        if (hadError) return null;
+
+        Parser parser = new Parser(errorListener, tokens);
+        List<Clause> clauses = parser.parse();
+        if (hadError) return null;
+
+        return clauses;
     }
 
     private static void printWelcomeMsg() {
@@ -84,7 +114,7 @@ public class Main {
         currentSource = "<consult>";
 
         while (true) {
-            System.out.print("> ");
+            System.out.print("?- ");
             try {
                 String line = reader.readLine();
 
@@ -96,36 +126,64 @@ public class Main {
                 }
 
                 if (line.startsWith("+")) {
-                    addStr(line.substring(1));
+                    add(line.substring(1));
                 } else {
                     consultStr(line);
                 }
             } catch (IOException e) {
                 // TODO: Print e?
                 return false;
+            } catch (Performer.Error e) {
+                errorListener.reportRuntimeError(e.line, e.msg);
             }
         }
     }
     private static void consultStr(String line) {
-        if (interpreter.startConsulting(line)) {
-            boolean result = run();
-            if (result) {
-                System.out.println("yes.");
-            } else {
-                System.out.println("no.");
-            }
+        if (!prepareToConsultStr(line)) {
+            return;
+        }
+
+        boolean result = run();
+
+        if (result) {
+            System.out.println("yes.");
+        } else {
+            System.out.println("no.");
         }
     }
 
-    private static void addStr(String line) {
-        interpreter.add(line);
+    private static boolean prepareToConsultStr(String line) {
+        Clause clause = generateConsultStr(line);
+        if (clause == null) return false;
+
+        createPerformer(clause);
+        return true;
+    }
+
+    private static Clause generateConsultStr(String line) {
+        hadError = false;
+        List<Clause> clauses = generate(line);
+        if (hadError || clauses == null) return null;
+
+        if (clauses.size() != 1) {
+            // TODO: Really?
+            errorListener.reportRuntimeError(0, "only one clause is allowed to consult");
+            return null;
+        }
+
+        return clauses.get(0);
+    }
+
+    private static void createPerformer(Clause clause) {
+        Performer.Configuration conf = new Performer.Configuration(base, System.out);
+        performer = new Performer(conf, clause);
     }
 
     private static boolean run() {
-        boolean result = interpreter.call();
+        boolean result = performer.call();
 
         if (result) {
-            if (interpreter.getCurrentEnvironment().isEmpty()) {
+            if (performer.getEnvironment().isEmpty()) {
                 return true;
             } else {
                 printEnvironment();
@@ -138,7 +196,7 @@ public class Main {
 
     private static boolean runRedo() {
         while (askUserToRedo()) {
-            boolean result = interpreter.redo();
+            boolean result = performer.redo();
 
             if (!result) {
                 return false;
@@ -150,11 +208,11 @@ public class Main {
     }
 
     private static void printEnvironment() {
-        StringJoiner sj = new StringJoiner("\n");
-        for (Map.Entry<String, Term> entry : interpreter.getCurrentEnvironment()) {
+        StringJoiner sj = new StringJoiner(",\n");
+        for (Map.Entry<String, Term> entry : performer.getEnvironment()) {
             sj.add(entry.getKey() + " = " + entry.getValue().toString());
         }
-        System.out.println(sj);
+        System.out.print(sj);
     }
 
     public static boolean askUserToRedo() {

@@ -14,7 +14,7 @@ public class Parser {
     private final ErrorListener errorListener;
     private int pos = 0;
 
-    private final Set<Term> boundVariables = new HashSet<>();
+    private final Set<String> boundVariables = new HashSet<>();
 
     public Parser(ErrorListener errorListener, List<Token> tokens) {
         this.tokens = tokens;
@@ -53,7 +53,7 @@ public class Parser {
         if (clauses.size() == 1) {
             return clauses.get(0);
         } else {
-            return new Clause.CompoundClauses(clauses);
+            return new Clause.Compound(clauses);
         }
     }
 
@@ -63,15 +63,27 @@ public class Parser {
             List<Term> terms = termsCommaList();
             require(TokenType.CLOSE_PAREN, "expected ')' at the end of fact clause");
 
-            Set<Term> ownSet = new HashSet<>(terms);
-            ownSet.removeAll(boundVariables);
-
-            boundVariables.addAll(terms);
+            Set<String> ownSet = getFactsOwnSet(terms);
+            boundVariables.addAll(ownSet);
 
             return new Clause.Fact(name, terms, ownSet);
         } else {
             return new Clause.Fact(name, new ArrayList<>(), new HashSet<>());
         }
+    }
+
+    private Set<String> getFactsOwnSet(List<Term> terms) {
+        Set<String> ownSet = new HashSet<>();
+
+        for (Term term : terms) {
+            if (term instanceof Term.Variable varTerm) {
+                ownSet.add(varTerm.name.text);
+            }
+        }
+
+        ownSet.removeAll(boundVariables);
+
+        return ownSet;
     }
 
     private Clause.Fact fact() {

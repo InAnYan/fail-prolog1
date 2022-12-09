@@ -48,7 +48,7 @@ public class LogicBase implements Clause.Visitor<Void> {
     }
 
     @Override
-    public Void visitCompoundClauses(Clause.CompoundClauses fact) {
+    public Void visitCompoundClauses(Clause.Compound fact) {
         // TODO: What is this?
         assert false;
         return null;

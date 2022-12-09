@@ -11,9 +11,9 @@ public abstract class Clause {
     public static class Fact extends Clause {
         public final Token name;
         public final List<Term> args;
-        public final Set<Term> ownVariables;
+        public final Set<String> ownVariables;
 
-        public Fact(Token name, List<Term> args, Set<Term> ownVariables) {
+        public Fact(Token name, List<Term> args, Set<String> ownVariables) {
             this.name = name;
             this.args = args;
             this.ownVariables = ownVariables;
@@ -24,14 +24,14 @@ public abstract class Clause {
         }
 
         public String toInfoString() {
-            return this.name + "/" + this.args.size();
+            return this.name.text + "/" + this.args.size();
         }
     }
 
-    public static class CompoundClauses extends Clause {
+    public static class Compound extends Clause {
         public final List<Clause> clauses;
 
-        public CompoundClauses(List<Clause> clauses) {
+        public Compound(List<Clause> clauses) {
             this.clauses = clauses;
         }
 
@@ -42,6 +42,6 @@ public abstract class Clause {
 
     public interface Visitor<R> {
         R visitFact(Fact fact);
-        R visitCompoundClauses(CompoundClauses compound);
+        R visitCompoundClauses(Compound compound);
     }
 }

@@ -15,7 +15,7 @@ public class Parser {
     private final ErrorListener errorListener;
     private int pos = 0;
 
-    private final Set<Term.Var> boundVariables = new HashSet<>();
+    private final List<Term.Var> boundVariables = new ArrayList<>();
 
     public Parser(ErrorListener errorListener, List<Token> tokens) {
         this.tokens = tokens;
@@ -40,7 +40,12 @@ public class Parser {
     }
 
     public Logic parseREPL() {
-        return conjunction();
+        try {
+            boundVariables.clear();
+            return conjunction();
+        } catch (ParserError e) {
+            return null;
+        }
     }
 
     private Rule rule() {
@@ -50,6 +55,7 @@ public class Parser {
             Logic body = conjunction();
             return new Rule(head, body);
         } else {
+            require(TokenType.DOT, "expected '.' after fact clause");
             int line = previous().line;
             return new Rule(head, new Logic.Fact("true", line, new ArrayList<>(), new HashSet<>()));
         }
@@ -90,11 +96,11 @@ public class Parser {
 
         for (Term term : terms) {
             if (term instanceof Term.Var varTerm) {
-                ownSet.add(varTerm);
+                if (!boundVariables.contains(varTerm)) {
+                    ownSet.add(varTerm);
+                }
             }
         }
-
-        ownSet.removeAll(boundVariables);
 
         return ownSet;
     }

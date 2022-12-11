@@ -6,6 +6,7 @@ public abstract class Term {
     public abstract <R> R accept(Visitor<R> visitor);
 
     public abstract String toString();
+    public abstract boolean equals(Object object);
 
     public static class Atom extends Term {
         public final String name;
@@ -25,6 +26,20 @@ public abstract class Term {
                 return this.name;
             }
         }
+
+        @Override
+        public boolean equals(Object object) {
+            if (this == object) {
+                return true;
+            }
+
+            if (object == null || getClass() != object.getClass()) {
+                return false;
+            }
+
+            Term.Atom atom = (Term.Atom)object;
+            return atom.name.equals(this.name);
+        }
     }
 
     public static class Var extends Term {
@@ -42,6 +57,20 @@ public abstract class Term {
         public String toString() {
             return this.name;
         }
+
+        @Override
+        public boolean equals(Object object) {
+            if (this == object) {
+                return true;
+            }
+
+            if (object == null || getClass() != object.getClass()) {
+                return false;
+            }
+
+            Term.Var atom = (Term.Var)object;
+            return atom.name.equals(this.name);
+        }
     }
 
     public static class Number extends Term {
@@ -58,6 +87,20 @@ public abstract class Term {
         @Override
         public String toString() {
             return String.valueOf(this.num);
+        }
+
+        @Override
+        public boolean equals(Object object) {
+            if (this == object) {
+                return true;
+            }
+
+            if (object == null || getClass() != object.getClass()) {
+                return false;
+            }
+
+            Term.Number atom = (Term.Number)object;
+            return atom.num == this.num;
         }
     }
 

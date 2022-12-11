@@ -38,10 +38,10 @@ public abstract class Logic {
     }
 
     public static class Conjunction extends Logic {
-        public final List<Logic.Fact> facts;
+        public final List<Logic> list;
 
-        public Conjunction(List<Logic.Fact> clauses) {
-            this.facts = clauses;
+        public Conjunction(List<Logic> list) {
+            this.list = list;
         }
 
         public <R> R accept(Visitor<R> visitor) {

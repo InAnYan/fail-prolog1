@@ -11,7 +11,7 @@ public class Lexer {
     private final List<Token> tokens = new ArrayList<>();
     private final ErrorListener errorListener;
     private int start, current;
-    private int line = 0;
+    private int line = 1;
 
     public Lexer(ErrorListener errorListener, String source) {
         this.errorListener = errorListener;
@@ -50,12 +50,12 @@ public class Lexer {
             case '(':  addToken(TokenType.OPEN_PAREN); break;
 
             case ':': {
-                advance();
                 if (peek() == '-') {
                     addToken(TokenType.NECK);
                 } else {
                     errorListener.reportParsingError(line, "unknown character");
                 }
+                advance();
                 break;
             }
 

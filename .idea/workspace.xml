@@ -4,21 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="682d119a-eca2-4153-8720-21340695b931" name="Changes" comment="performer? also added ownVars">
-      <change afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/NewNewPerformer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/NewPerformer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/repr/Rule.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="682d119a-eca2-4153-8720-21340695b931" name="Changes" comment="((((((((((((((((">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sandbox.pl" beforeDir="false" afterPath="$PROJECT_DIR$/sandbox.pl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/inanyan/pi/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inanyan/pi/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/LogicBase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/LogicBase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/Environment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/Environment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/NewNewPerformer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/NewPerformer.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/Performer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/logic/Performer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/parsing/Lexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/parsing/Lexer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/parsing/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/parsing/Parser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/parsing/TokenType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/parsing/TokenType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/repr/Clause.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/repr/Logic.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/repr/Logic.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/repr/Logic.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/repr/Term.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/repr/Term.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/inanyan/prolog/util/Rules.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/inanyan/prolog/util/ParsingRules.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -109,7 +106,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670309965662</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="((((((((((((((((">
+      <created>1670612408503</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1670612408503</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -128,18 +132,25 @@
     <MESSAGE value="the last - goals" />
     <MESSAGE value="it works, but with the same bugs. changing the goal concept" />
     <MESSAGE value="performer? also added ownVars" />
-    <option name="LAST_COMMIT_MESSAGE" value="performer? also added ownVars" />
+    <MESSAGE value="((((((((((((((((" />
+    <option name="LAST_COMMIT_MESSAGE" value="((((((((((((((((" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/inanyan/prolog/logic/Performer.java</url>
-          <line>75</line>
-          <option name="timeStamp" value="5" />
+          <line>193</line>
+          <option name="timeStamp" value="44" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="com.inanyan.prolog.logic.LogicBase$Record" memberName="terms" />
+        <PinnedItemInfo parentTag="com.inanyan.prolog.repr.Term$Atom" memberName="name" />
+      </pinned-members>
+    </pin-to-top-manager>
     <watches-manager>
       <configuration name="Application">
         <watch expression="this" />

@@ -6,6 +6,7 @@ import com.inanyan.prolog.parsing.Lexer;
 import com.inanyan.prolog.parsing.Parser;
 import com.inanyan.prolog.parsing.Token;
 import com.inanyan.prolog.repr.Logic;
+import com.inanyan.prolog.repr.Rule;
 import com.inanyan.prolog.repr.Term;
 import com.inanyan.prolog.util.ErrorListener;
 
@@ -84,23 +85,38 @@ public class Main {
     }
 
     private static boolean add(String source) {
-        List<Logic> clauses = generate(source);
+        List<Rule> clauses = generate(source);
         if (clauses == null) return false;
 
         base.add(clauses);
         return true;
     }
 
-    private static List<Logic> generate(String source) {
+    private static Parser createParserFor(String source) {
         Lexer lexer = new Lexer(errorListener, source);
         List<Token> tokens = lexer.scanTokens();
         if (hadError) return null;
 
-        Parser parser = new Parser(errorListener, tokens);
-        List<Logic> clauses = parser.parse();
+        return new Parser(errorListener, tokens);
+    }
+
+    private static List<Rule> generate(String source) {
+        Parser parser = createParserFor(source);
+        if (hadError || parser == null) return null;
+        List<Rule> clauses = parser.parseProgram();
         if (hadError) return null;
 
         return clauses;
+    }
+
+    private static Logic generateREPL(String source) {
+        Parser parser = createParserFor(source);
+        if (hadError || parser == null) return null;
+
+        Logic logic = parser.parseREPL();
+        if (hadError) return null;
+
+        return logic;
     }
 
     private static void printWelcomeMsg() {
@@ -162,16 +178,11 @@ public class Main {
 
     private static Logic generateConsultStr(String line) {
         hadError = false;
-        List<Logic> clauses = generate(line);
-        if (hadError || clauses == null) return null;
 
-        if (clauses.size() != 1) {
-            // TODO: Really?
-            errorListener.reportRuntimeError(0, "only one clause is allowed to consult");
-            return null;
-        }
+        Logic logic = generateREPL(line);
+        if (hadError || logic == null) return null;
 
-        return clauses.get(0);
+        return logic;
     }
 
     private static void createPerformer(Logic clause) {
@@ -183,7 +194,7 @@ public class Main {
         boolean result = performer.call();
 
         if (result) {
-            if (performer.getEnvironment().isEmpty()) {
+            if (performer.getEnvironment().isCompletelyEmpty()) {
                 return true;
             } else {
                 printEnvironment();
